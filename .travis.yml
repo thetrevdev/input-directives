@@ -1,0 +1,16 @@
+---
+language: node_js
+node_js:
+- '0.8'
+before_install:
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- npm install -g bower grunt-cli
+- npm install
+- bower install
+before_script: bower_components/angular-ui-docs/.travis/before_script.sh
+after_success: bower_components/angular-ui-docs/.travis/after_success.sh
+script: grunt
+env:
+  global:
+  - REPO="git@github.com:thetrevdev/input-directives.git"
