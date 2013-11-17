@@ -1,5 +1,4 @@
-
-[  "$TRAVIS_PULL_REQUEST" != "false" ] || [  "$TRAVIS_BRANCH" != "develop" ] && echo -e "\n" && exit 0
+[  "$TRAVIS_PULL_REQUEST" != "false" ] || [  "$TRAVIS_BRANCH" != "master" ] && echo -e "\n" && exit 0
 
 #
 # Authentication
