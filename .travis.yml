@@ -1,4 +1,3 @@
----
 language: node_js
 node_js:
 - '0.8'
@@ -14,3 +13,9 @@ script: grunt
 env:
   global:
   - REPO="git@github.com:thetrevdev/input-directives.git"
+  - secure: OAC0geiPYIrwJ04SC2jqmyeu8fcFiPhn2ens3vc/X09GuFhWdgtsu4BCp9QFLWnstVMUUCI1eFHGLAB8PHtBfnRIUlphWKipb7yy/voX93WPk0Y3jCszzMzVhK3SYj1BJWWOesAkYtyJqaF0/+4nFVY4OpZFfOOU9yfC0rxvf5E=
+  - secure: ClSMfpauXXQ2EhvEcTlyK1iFEbird0EoAencQ6DiMbtRjGtj/y1ZFMy+VciP3gulhAeAnCXhwvX9DxQNkxmwDgNeMpdzjxU9uS0raQT1xqk0Zl+PIjPMiYcq/iPUJ/6jXg4LQ9JvBD1F6ko2o2yIzkQUuUXTu/w9h1lNxQDZijM=
+  - secure: NBiD014bttObpUo+Gr/fh42haHd0t77SgKaQWsII2++13rUnGvUYhaT4SHqcdUJRkq1UA+PPMBYapK7LZcUF5zTozrdBmEYbhnBnz9xtI55v+IBkmB7DughhxIOMHs4SvqdlFZV8w0bA3AT0ef3zQ4QHuWXEftMYVcdi3b3VDe4=
+  - secure: UXRINILQghWHW8JcjXoZuoEtN5nn2orEsTE012YZUmtGkuqcZz8cmF8cF5VZcCZH/qKF2IgRmJQ7gJW7/L8X0NFpdEIMoRhF550uWN0K3TUGrNdgB8sc96C1jG7ho9MFPHoFd0G7kWLjH8azFMT2JMepCXrgLAwiVxjrqU3L844=
+  - secure: lG9aITJITlWIg1Rz0zqMFFxrxnJUUZ09c583mr3+AS43IEkpxca2wi61lRGf4ZP3tE1ErPNCYg4wtaJA42ThCMv6fP5zpZWAa8nd70WVkVV2G4yRJX0IZdyanNuWo0NuN76t/llLKPqkVD7greqmV6dyuhhQNTJve465cOTjC+Y=
+  - secure: JNfcFFLbj7AbPWxkdx18z7rf+K6p62K3JIci1Ow2pxP4K/dJPOXeU9ka2HPReV5CYXcAEuwvSv00C16o39cKh2jponG4GY83kcplCASVb6QXbPcplR338z0OqjRy52AkVs6m3cRkn8SFWSjWGgnQbgQkv31OamVgxPboN2RZS1w=
