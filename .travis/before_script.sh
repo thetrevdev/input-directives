@@ -4,7 +4,7 @@
 #
 # Authentication
 #
-echo -e ">>> AngularUI (angular-ui@googlegroups.com) authentication!\n"
+echo -e ">>> (thetrevdev@gmail.com) authentication!\n"
 
 git remote set-url origin $REPO.git
 git config --global user.email "thetrevdev@gmail.com"
