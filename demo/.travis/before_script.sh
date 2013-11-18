@@ -17,11 +17,11 @@ base64 --decode --ignore-garbage ~/.ssh/travis_rsa_64 > ~/.ssh/id_rsa
 chmod 600 ~/.ssh/id_rsa
 
 echo -e ">>> Copy config"
-mv -fv bower_components/angular-ui-docs/.travis/ssh-config ~/.ssh/config
+mv -fv demo/.travis/ssh-config ~/.ssh/config
 
 echo -e ">>> Hi github.com !"
 ssh -T git@github.com
 
-if [ $? -eq 255 ]; then echo '>>> Authentication Fail ! $?'; exit 3; fi
+if [ $? -eq 255 ]; then echo '>>> Authentication Fail !'; exit 3; fi
 
 echo -e "\n"

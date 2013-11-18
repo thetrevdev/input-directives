@@ -22,7 +22,7 @@ module.exports = function (grunt) {
   // Default task.
   grunt.registerTask('default', ['jshint', 'karma:unit']);
   grunt.registerTask('build', ['concat:tmp', 'concat:modules', 'clean:rm_tmp', 'uglify']);
-  grunt.registerTask('build-doc', ['build', 'concat:html_doc', 'UGF', 'copy']);
+  grunt.registerTask('build-doc', ['build', 'concat:html_doc', 'UGF', 'clean:rm_tmp', 'copy']);
   grunt.registerTask('server', ['karma:start']);
 
 
@@ -34,7 +34,7 @@ module.exports = function (grunt) {
 
   // Project configuration.
   initConfig = {
-    demo : 'demo'
+    demo : 'demo',
     tmp : 'demo/tmp',
     dist : 'demo/out',
     pkg: grunt.file.readJSON('package.json'),
@@ -51,10 +51,10 @@ module.exports = function (grunt) {
         orgName : "thetrevdev",
         repoName : "input-directives",
         js : [
-          '<%= meta.view.repoName %>.min.js'
+          'build/<%= meta.view.repoName %>.min.js'
         ]
       },
-      destName : '<%= tmp >/<%= meta.view.repoName %>'
+      destName : '<%= dist %>/build/<%= meta.view.repoName %>'
     },
     watch: {
       karma: {
@@ -83,7 +83,7 @@ module.exports = function (grunt) {
       modules: {
         options: {banner: '<%= meta.banner %>'},
         files: {
-          '<%= meta.destName %>.js': ['tmp/dep.js', 'modules/input-directives.js'],
+          '<%= meta.destName %>.js': ['<%= tmp %>/dep.js', 'modules/input-directives.js'],
           '<%= meta.destName %>-ieshiv.js' : ['modules/ie-shiv/*.js']
         }
       }
@@ -116,6 +116,11 @@ module.exports = function (grunt) {
       }
     },
     copy: {
+      main : {
+        files : [
+          {expand: true, cwd: '<%= demo %>/', src: [ '**', '!.**', '!out/**' ], dest: '<%= dist %>/'}
+        ]
+      },
       template : {
         options : {processContent : function(content){
           return grunt.template.process(content);
