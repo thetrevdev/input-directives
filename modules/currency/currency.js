@@ -14,7 +14,7 @@
  * @example <input ui-jq="datepicker" ui-options="{showOn:'click'},secondParameter,thirdParameter" ui-refresh="iChange">
  */
 angular.module('id.currency',[]).
-  directive('idCurrency', [ function idCurrencyInjectingFunction($filter) {
+  directive('idCurrency', ['$filter', function idCurrencyInjectingFunction($filter) {
 
    function stripToNumber(num){
       num = num || '';
