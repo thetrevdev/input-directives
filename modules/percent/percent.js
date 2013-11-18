@@ -26,12 +26,13 @@ angular.module('id.percent',[]).
    }
 
     function formatToPercent(number){
-      if(isNaN(number))
+      if(isNaN(number)){
         return number;
-     if(number<0){
-      return '-' + $filter('number')(number*-1,2)+'%';
-     }
-     return $filter('number')(number,2)+'%';
+      }
+       if(number<0){
+        return '-' + $filter('number')(number*-1,2)+'%';
+       }
+       return $filter('number')(number,2)+'%';
     }
 
     return {
