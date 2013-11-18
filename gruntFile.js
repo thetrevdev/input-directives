@@ -16,7 +16,7 @@ module.exports = function (grunt) {
    * Custom task to inline a generated file at a certain moment...
    */
   grunt.registerTask('UGF', 'Use Generated Files.', function() {
-    initConfig.meta.view.demoHTML= grunt.file.read(  grunt.template.process("<%= dist %>/demos.html"));
+    initConfig.meta.view.demoHTML= grunt.file.read(  grunt.template.process("<%= tmp %>/demos.html"));
   });
 
   // Default task.
@@ -34,8 +34,9 @@ module.exports = function (grunt) {
 
   // Project configuration.
   initConfig = {
-    bower: 'bower_components',
-    dist : 'demo',
+    demo : 'demo'
+    tmp : 'demo/tmp',
+    dist : 'demo/out',
     pkg: grunt.file.readJSON('package.json'),
     meta: {
       banner: ['/**',
@@ -50,10 +51,10 @@ module.exports = function (grunt) {
         orgName : "thetrevdev",
         repoName : "input-directives",
         js : [
-          'build/<%= meta.view.repoName %>.min.js'
+          '<%= meta.view.repoName %>.min.js'
         ]
       },
-      destName : '<%= dist %>/build/<%= meta.view.repoName %>'
+      destName : '<%= tmp >/<%= meta.view.repoName %>'
     },
     watch: {
       karma: {
@@ -74,10 +75,10 @@ module.exports = function (grunt) {
           ].join('\n  '),
           footer : '</div>'},
         src: [ 'modules/**/demo/index.html'],
-        dest: '<%= dist %>/demos.html'
+        dest: '<%= tmp %>/demos.html'
       },
       tmp: {
-        files: {  'tmp/dep.js': [ 'modules/**/*.js', '!modules/input-directives.js', '!modules/ie-shiv/*.js', '!modules/**/test/*.js']}
+        files: {  '<%= tmp %>/dep.js': [ 'modules/**/*.js', '!modules/input-directives.js', '!modules/ie-shiv/*.js', '!modules/**/test/*.js']}
       },
       modules: {
         options: {banner: '<%= meta.banner %>'},
@@ -97,7 +98,7 @@ module.exports = function (grunt) {
       }
     },
     clean: {
-      rm_tmp: {src: ['tmp']}
+      rm_tmp: {src: ['<%= tmp %>']}
     },
     jshint: {
       files:['modules/**/*.js', 'gruntFile.js', 'test/**/*Spec.js', 'demo/**/*.js'],
@@ -115,18 +116,12 @@ module.exports = function (grunt) {
       }
     },
     copy: {
-      main: {
-        files: [
-          // UI.Include needs a external html source.
-          {src: ['modules/include/demo/fragments.html'], dest: '<%= dist %>/assets/fragments.html', filter: 'isFile'}
-        ]
-      },
       template : {
         options : {processContent : function(content){
           return grunt.template.process(content);
         }},
         files: [
-          {src: ['<%= dist %>/index.tmpl'], dest: '<%= dist %>/index.html'}
+          {src: ['<%= demo %>/.tmpl/index.tmpl'], dest: '<%= dist %>/index.html'}
         ]
       }
     }
