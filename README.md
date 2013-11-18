@@ -2,6 +2,11 @@
 
 ***
 
+[![Build Status](https://travis-ci.org/thetrevdev/input-directives.png?branch=master)](https://travis-ci.org/thetrevdev/input-directives)
+
+
+##Demo / Download
+http://thetrevdev.github.io/input-directives/
 
 ## Usage
 
@@ -11,7 +16,7 @@
 
 ## Installation
 
-Add the specific modules to your dependencies, or add the entire lib by depending on `ui.utils`
+Add the specific modules to your dependencies, or add the entire lib by depending on `id.directives`
 
 ```javascript
 angular.module('myApp', ['id.currency', ...])
