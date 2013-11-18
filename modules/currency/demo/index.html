@@ -10,7 +10,7 @@
 
       <div class="well">
         <p>
-          <input type="text" id-currency ng-model="currency.amount" /> - Model: 
+          <input type="text" id-currency ng-init="currency.amount=1234.564" ng-model="currency.amount" /> - Model: 
           {{currency.amount}}
         </p>
       </div>
@@ -24,6 +24,6 @@
   <h3>How?</h3>
 
 <pre class="prettyprint">
-&lt;input type=&quot;text&quot; id-currency ng-model=&quot;currency.amount&quot; /&gt;
+&lt;input type=&quot;text&quot; id-currency ng-init=&quot;currency.amount=1234.56&quot; ng-model=&quot;currency.amount&quot; /&gt;
 </pre>
 </section>
