@@ -101,7 +101,7 @@ module.exports = function (grunt) {
       rm_tmp: {src: ['<%= tmp %>']}
     },
     jshint: {
-      files:['modules/**/*.js', 'gruntFile.js', 'test/**/*Spec.js', 'demo/**/*.js'],
+      files:['modules/**/*.js', 'gruntFile.js', 'test/**/*Spec.js', 'demo/demo.js'],
       options: {
         curly: true,
         eqeqeq: true,
