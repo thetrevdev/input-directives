@@ -1,6 +1,6 @@
 /**
  * angular-input-directives - 
- * @version v0.0.4 - 2013-11-17
+ * @version v0.0.4 - 2013-11-18
  * @link http://thetrevdev.github.com/input-directives
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -20,7 +20,7 @@
  * @example <input ui-jq="datepicker" ui-options="{showOn:'click'},secondParameter,thirdParameter" ui-refresh="iChange">
  */
 angular.module('id.currency',[]).
-  directive('idCurrency', [ function idCurrencyInjectingFunction($filter) {
+  directive('idCurrency', ['$filter', function idCurrencyInjectingFunction($filter) {
 
    function stripToNumber(num){
       num = num || '';
