@@ -19,76 +19,75 @@
  *
  * @example <input ui-jq="datepicker" ui-options="{showOn:'click'},secondParameter,thirdParameter" ui-refresh="iChange">
  */
-angular.module('id.currency',[]).
-  directive('idCurrency', ['$filter', function idCurrencyInjectingFunction($filter) {
+angular.module('id.currency', []).
+directive('idCurrency', ['$filter',
+	function idCurrencyInjectingFunction($filter) {
 
-   function stripToNumber(num){
-      num = num || '';
-      var number = parseFloat(num.replace(/[^0-9|^\.|^-]+/g, ''));
-      if (isNaN(number)){
-        return undefined;
-      }
-      return number;
-   }
-   
-   function formatToCurrency(number){
-     if(number<0){
-      return '-' + $filter('currency')(number*-1);
-     }
-     return $filter('currency')(number);
-    }
-       
+		return {
+			require: 'ngModel',
+			restrict: 'A',
+			link: function(scope, element, attr, ctrl) {
 
-    return {
-      require: 'ngModel',
-      restrict: 'A',
-      link: function (scope, element, attr, ctrl) {
-  
-        angular.element(element).bind('blur', function (e) {
-            scope.$apply(function () {
-              var viewValue = element.val();
-              if(viewValue !== '' && viewValue !== undefined){
-                var formatted = formatToCurrency(stripToNumber(viewValue));
-                
-                if (ctrl.$viewValue !== formatted) {
-                    element.val(formatted);
-                    ctrl.$setViewValue(formatted);
-                }
-              }
-            });
-        });
-  
-        function viewValueChange(viewValue) {
-          var decimal = stripToNumber(viewValue);
-          return decimal;
-        }
-  
-        function modelChange(modelVal) {
-          var val = modelVal;
-          return formatToCurrency(val);
-        }
-        
-        ctrl.$parsers.push(viewValueChange);
-        ctrl.$formatters.unshift(modelChange);
-        
-        if(attr.min){
-          var min = scope.$eval(attr.min);
-          var minValidator = function (number) {
-            if (number >= min) {
-                ctrl.$setValidity('min', true);
-            } else {
-                ctrl.$setValidity('min', false);
-            }
-            return number;
-          };
-          
-          ctrl.$parsers.push(minValidator);
-          ctrl.$formatters.push(minValidator);
-        }
-    }
-  };
-}]);
+				angular.element(element).bind('blur', elementBlur);
 
+				ctrl.$parsers.push(viewValueChange);
+				ctrl.$formatters.unshift(modelChange);
+
+				if (attr.min) {
+					ctrl.$parsers.push(minValidator);
+					ctrl.$formatters.push(minValidator);
+				}
+
+				function elementBlur(e) {
+					scope.$apply(function() {
+						var viewValue = element.val();
+						if (viewValue === '' || typeof viewValue === 'undefined') {
+							return;
+						}
+						var formatted = formatToCurrency(stripToNumber(viewValue));
+						if (ctrl.$viewValue === formatted) {
+							return;
+						}
+						element.val(formatted);
+						ctrl.$setViewValue(formatted);
+					});
+				}
+
+				function stripToNumber(num) {
+					num = num || '';
+					var number = parseFloat(num.replace(/[^0-9|^\.|^-]+/g, ''));
+					if (isNaN(number)) {
+						return;
+					}
+					return number;
+				}
+
+				function formatToCurrency(number) {
+					if (number < 0) {
+						return '-' + $filter('currency')(number * -1);
+					}
+					return $filter('currency')(number);
+				}
+
+				function viewValueChange(viewValue) {
+					var decimal = stripToNumber(viewValue);
+					return decimal;
+				}
+
+				function modelChange(modelVal) {
+					var val = modelVal;
+					return formatToCurrency(val);
+				}
+
+				function minValidator(number) {
+					var min = scope.$eval(attr.min);
+					ctrl.$setValidity('min', number >= min);
+					return number;
+				}
+			}
+		};
+	}
+]);
 /**
  * General-purpose jQuery wrapper. Simply pass the plugin name as the expression.
  *
@@ -104,69 +103,70 @@ angular.module('id.currency',[]).
  *
  * @example <input ui-jq="datepicker" ui-options="{showOn:'click'},secondParameter,thirdParameter" ui-refresh="iChange">
  */
-angular.module('id.percent',[]).
-  directive('idPercent', ['$filter', function idCurrencyInjectingFunction($filter) {
+angular.module('id.percent', []).
+directive('idPercent', ['$filter',
+	function idCurrencyInjectingFunction($filter) {
 
-   function stripToNumber(num){
-      num = num || '';
-      var number = parseFloat(num.replace(/[^0-9|^\.|^-]+/g, ''));
-      if (isNaN(number)){
-        return undefined;
-      }
-      return number;
-   }
+		function stripToNumber(num) {
+			num = num || '';
+			var number = parseFloat(num.replace(/[^0-9|^\.|^-]+/g, ''));
+			if (isNaN(number)) {
+				return undefined;
+			}
+			return number;
+		}
 
-    function formatToPercent(number){
-      if(isNaN(number)){
-        return undefined;
-      }
-       if(number<0){
-        return '-' + $filter('number')(number*-1,2)+'%';
-       }
-       return $filter('number')(number,2)+'%';
-    }
+		function formatToPercent(number) {
+			if (isNaN(number)) {
+				return undefined;
+			}
+			if (number < 0) {
+				return '-' + $filter('number')(number * -1, 2) + '%';
+			}
+			return $filter('number')(number, 2) + '%';
+		}
 
-    return {
-      require: 'ngModel',
-      restrict: 'A',
-      link: function (scope, element, attr, ctrl) {
+		return {
+			require: 'ngModel',
+			restrict: 'A',
+			link: function(scope, element, attr, ctrl) {
 
 
-        element.on('blur', function () {
-            scope.$apply(function () {
-                var viewValue = element.val();
-                var number = stripToNumber(viewValue);
+				element.on('blur', function() {
+					scope.$apply(function() {
+						var viewValue = element.val();
+						var number = stripToNumber(viewValue);
 
-                var formatted = formatToPercent(number);
-                if (ctrl.$viewValue !== formatted) {
-                    element.val(formatted);
-                    ctrl.$setViewValue(formatted);
-                }
+						var formatted = formatToPercent(number);
+						if (ctrl.$viewValue !== formatted) {
+							element.val(formatted);
+							ctrl.$setViewValue(formatted);
+						}
 
-            });
-        });
+					});
+				});
 
-        function viewValueChange(viewValue) {
-          var decimal = stripToNumber(viewValue);
-          if(!isNaN(decimal)){
-            decimal = decimal/100.0;
-          }
-          ctrl.$setValidity('validPercent', !isNaN(decimal));
-          return decimal;
-        }
-  
-        function modelChange(val) {
-          ctrl.$setValidity('validPercent', !isNaN(val));
-          return formatToPercent(val*100.0);
-        }
+				function viewValueChange(viewValue) {
+					var decimal = stripToNumber(viewValue);
+					if (!isNaN(decimal)) {
+						decimal = decimal / 100.0;
+					}
+					ctrl.$setValidity('validPercent', !isNaN(decimal));
+					return decimal;
+				}
 
-        ctrl.$parsers.push(viewValueChange);
-        ctrl.$formatters.unshift(modelChange);
-    }
-  };
-}]);
+				function modelChange(val) {
+					ctrl.$setValidity('validPercent', !isNaN(val));
+					return formatToPercent(val * 100.0);
+				}
 
-angular.module('id.input-directives',  [
-  'id.currency',
-  'id.percent'
+				ctrl.$parsers.push(viewValueChange);
+				ctrl.$formatters.unshift(modelChange);
+			}
+		};
+	}
+]);
+angular.module('id.input-directives', [
+	'id.currency',
+	'id.percent'
 ]);
