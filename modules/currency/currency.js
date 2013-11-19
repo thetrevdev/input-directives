@@ -17,41 +17,51 @@ angular.module('id.currency', []).
 directive('idCurrency', ['$filter',
 	function idCurrencyInjectingFunction($filter) {
 
-		function stripToNumber(num) {
-			num = num || '';
-			var number = parseFloat(num.replace(/[^0-9|^\.|^-]+/g, ''));
-			if (isNaN(number)) {
-				return undefined;
-			}
-			return number;
-		}
-
-		function formatToCurrency(number) {
-			if (number < 0) {
-				return '-' + $filter('currency')(number * -1);
-			}
-			return $filter('currency')(number);
-		}
-
-
 		return {
 			require: 'ngModel',
 			restrict: 'A',
 			link: function(scope, element, attr, ctrl) {
 
-				angular.element(element).bind('blur', function(e) {
+				angular.element(element).bind('blur', elementBlur);
+
+				ctrl.$parsers.push(viewValueChange);
+				ctrl.$formatters.unshift(modelChange);
+
+				if (attr.min) {
+					ctrl.$parsers.push(minValidator);
+					ctrl.$formatters.push(minValidator);
+				}
+
+				function elementBlur(e) {
 					scope.$apply(function() {
 						var viewValue = element.val();
-						if (viewValue !== '' && viewValue !== undefined) {
-							var formatted = formatToCurrency(stripToNumber(viewValue));
-
-							if (ctrl.$viewValue !== formatted) {
-								element.val(formatted);
-								ctrl.$setViewValue(formatted);
-							}
+						if (viewValue === '' || typeof viewValue === 'undefined') {
+							return;
 						}
+						var formatted = formatToCurrency(stripToNumber(viewValue));
+						if (ctrl.$viewValue === formatted) {
+							return;
+						}
+						element.val(formatted);
+						ctrl.$setViewValue(formatted);
 					});
-				});
+				}
+
+				function stripToNumber(num) {
+					num = num || '';
+					var number = parseFloat(num.replace(/[^0-9|^\.|^-]+/g, ''));
+					if (isNaN(number)) {
+						return;
+					}
+					return number;
+				}
+
+				function formatToCurrency(number) {
+					if (number < 0) {
+						return '-' + $filter('currency')(number * -1);
+					}
+					return $filter('currency')(number);
+				}
 
 				function viewValueChange(viewValue) {
 					var decimal = stripToNumber(viewValue);
@@ -63,22 +73,10 @@ directive('idCurrency', ['$filter',
 					return formatToCurrency(val);
 				}
 
-				ctrl.$parsers.push(viewValueChange);
-				ctrl.$formatters.unshift(modelChange);
-
-				if (attr.min) {
+				function minValidator(number) {
 					var min = scope.$eval(attr.min);
-					var minValidator = function(number) {
-						if (number >= min) {
-							ctrl.$setValidity('min', true);
-						} else {
-							ctrl.$setValidity('min', false);
-						}
-						return number;
-					};
-
-					ctrl.$parsers.push(minValidator);
-					ctrl.$formatters.push(minValidator);
+					ctrl.$setValidity('min', number >= min);
+					return number;
 				}
 			}
 		};
