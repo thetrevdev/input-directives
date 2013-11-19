@@ -13,72 +13,74 @@
  *
  * @example <input ui-jq="datepicker" ui-options="{showOn:'click'},secondParameter,thirdParameter" ui-refresh="iChange">
  */
-angular.module('id.currency',[]).
-  directive('idCurrency', ['$filter', function idCurrencyInjectingFunction($filter) {
+angular.module('id.currency', []).
+directive('idCurrency', ['$filter',
+	function idCurrencyInjectingFunction($filter) {
 
-   function stripToNumber(num){
-      num = num || '';
-      var number = parseFloat(num.replace(/[^0-9|^\.|^-]+/g, ''));
-      if (isNaN(number)){
-        return undefined;
-      }
-      return number;
-   }
-   
-   function formatToCurrency(number){
-     if(number<0){
-      return '-' + $filter('currency')(number*-1);
-     }
-     return $filter('currency')(number);
-    }
-       
+		function stripToNumber(num) {
+			num = num || '';
+			var number = parseFloat(num.replace(/[^0-9|^\.|^-]+/g, ''));
+			if (isNaN(number)) {
+				return undefined;
+			}
+			return number;
+		}
 
-    return {
-      require: 'ngModel',
-      restrict: 'A',
-      link: function (scope, element, attr, ctrl) {
-  
-        angular.element(element).bind('blur', function (e) {
-            scope.$apply(function () {
-              var viewValue = element.val();
-              if(viewValue !== '' && viewValue !== undefined){
-                var formatted = formatToCurrency(stripToNumber(viewValue));
-                
-                if (ctrl.$viewValue !== formatted) {
-                    element.val(formatted);
-                    ctrl.$setViewValue(formatted);
-                }
-              }
-            });
-        });
-  
-        function viewValueChange(viewValue) {
-          var decimal = stripToNumber(viewValue);
-          return decimal;
-        }
-  
-        function modelChange(modelVal) {
-          var val = modelVal;
-          return formatToCurrency(val);
-        }
-        
-        ctrl.$parsers.push(viewValueChange);
-        ctrl.$formatters.unshift(modelChange);
-        
-        if(attr.min){
-          var min = scope.$eval(attr.min);
-          var minValidator = function (number) {
-            if (number >= min) {
-                ctrl.$setValidity('min', true);
-            } else {
-                ctrl.$setValidity('min', false);
-            }
-            return number;
-          };
-          
-          ctrl.$parsers.push(minValidator);
-          ctrl.$formatters.push(minValidator);
-        }
-    }
-  };
-}]);
+		function formatToCurrency(number) {
+			if (number < 0) {
+				return '-' + $filter('currency')(number * -1);
+			}
+			return $filter('currency')(number);
+		}
+
+
+		return {
+			require: 'ngModel',
+			restrict: 'A',
+			link: function(scope, element, attr, ctrl) {
+
+				angular.element(element).bind('blur', function(e) {
+					scope.$apply(function() {
+						var viewValue = element.val();
+						if (viewValue !== '' && viewValue !== undefined) {
+							var formatted = formatToCurrency(stripToNumber(viewValue));
+
+							if (ctrl.$viewValue !== formatted) {
+								element.val(formatted);
+								ctrl.$setViewValue(formatted);
+							}
+						}
+					});
+				});
+
+				function viewValueChange(viewValue) {
+					var decimal = stripToNumber(viewValue);
+					return decimal;
+				}
+
+				function modelChange(modelVal) {
+					var val = modelVal;
+					return formatToCurrency(val);
+				}
+
+				ctrl.$parsers.push(viewValueChange);
+				ctrl.$formatters.unshift(modelChange);
+
+				if (attr.min) {
+					var min = scope.$eval(attr.min);
+					var minValidator = function(number) {
+						if (number >= min) {
+							ctrl.$setValidity('min', true);
+						} else {
+							ctrl.$setValidity('min', false);
+						}
+						return number;
+					};
+
+					ctrl.$parsers.push(minValidator);
+					ctrl.$formatters.push(minValidator);
+				}
+			}
+		};
+	}
+]);
