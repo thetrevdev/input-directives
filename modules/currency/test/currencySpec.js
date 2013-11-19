@@ -22,26 +22,80 @@ describe('idCurrency', function() {
 			});
 		});
 
-		it('no amount should render as empty string', function() {
-			inject(function($compile, $rootScope) {
-				var element;
-				element = $compile("<input type=\"text\" id-currency ng-model=\"amount\" />")($rootScope);
-				expect(element.val()).toEqual("");
-			});
-		});
-
-		it('should format view to number', function() {
+		it('should take view to number in model', function() {
 			inject(function($compile, $rootScope, $sniffer) {
 				var element;
 				element = $compile("<input type=\"text\" id-currency ng-model=\"amount\" />")($rootScope);
-				//#TODO
-				//element.val('1.23');
-				//var inputEvent = ($sniffer.hasEvent('input') ? 'input' : 'change');
-				//element[inputEvent]();
+				element.val('1.23');
+				
+				var inputEvent = ($sniffer.hasEvent('input') ? 'input' : 'change');
+				element.triggerHandler(inputEvent);
+				
+				expect($rootScope.amount).toEqual(1.23);
+			});
+		});
 
-				//$rootScope.$apply();
+		it('init as empty view and undefined model', function() {
+			inject(function($compile, $rootScope) {
+				var element;
+				element = $compile("<input type=\"text\" id-currency ng-model=\"amount\" />")($rootScope);
 
-				//expect(element.val()).toEqual(1.23);
+				expect(element.val()).toEqual('');
+				expect($rootScope.amount).not.toBeDefined(); 
+			});
+		});
+	});
+
+	describe('Format view to currency', function() {
+		it('should format view on blur', function() {
+			inject(function($compile, $rootScope, $sniffer) {
+				var element;
+				element = $compile("<input type=\"text\" id-currency ng-model=\"amount\" />")($rootScope);
+				element.val('1234.5');
+				var inputEvent = ($sniffer.hasEvent('input') ? 'input' : 'change');
+				element.triggerHandler(inputEvent);
+				element.triggerHandler('blur');
+
+				expect(element.val()).toEqual('$1,234.50');
+			});
+		});
+
+		it('format negative number with -', function() {
+			inject(function($compile, $rootScope, $sniffer) {
+				var element;
+				element = $compile("<input type=\"text\" id-currency ng-model=\"amount\" />")($rootScope);
+				element.val('-.5');
+				var inputEvent = ($sniffer.hasEvent('input') ? 'input' : 'change');
+				element.triggerHandler(inputEvent);
+				element.triggerHandler('blur');
+
+				expect(element.val()).toEqual('-$0.50');
+			});
+		});
+	});
+
+		
+	describe('E2E view changes', function() {
+		it('switch to invalid value', function() {
+			inject(function($compile, $rootScope, $sniffer) {
+				var element;
+				element = $compile("<input type=\"text\" id-currency ng-model=\"amount\" />")($rootScope);
+				var inputEvent = ($sniffer.hasEvent('input') ? 'input' : 'change');
+				element.val('1');
+				element.triggerHandler(inputEvent);
+				expect($rootScope.amount).toEqual(1);
+				expect(element.val()).toEqual('1');
+
+				element.val('a');
+				element.triggerHandler(inputEvent);
+				expect(element.val()).toEqual('a');
+
+				expect($rootScope.amount).not.toBeDefined(); 
+
+				element.triggerHandler('blur');
+
+				expect($rootScope.amount).not.toBeDefined(); 
+				expect(element.val()).toEqual('');
 			});
 		});
 	});
