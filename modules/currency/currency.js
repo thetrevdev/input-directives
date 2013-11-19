@@ -20,7 +20,7 @@ angular.module('id.currency',[]).
       num = num || '';
       var number = parseFloat(num.replace(/[^0-9|^\.|^-]+/g, ''));
       if (isNaN(number)){
-        return 0;
+        return undefined;
       }
       return number;
    }

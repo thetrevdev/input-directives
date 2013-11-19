@@ -7,10 +7,12 @@
       <h3>What?</h3>
 
       <p>Percent.</p>
+      <p>Parser will divide by 100 for model</p>
+      <p>Formatter will multiply by 100 for display to view</p>
 
       <div class="well">
         <p>
-          <input type="text" id-percent ng-init="percent.val=12.34" ng-model="percent.val" /> - Model: 
+          <input type="text" id-percent ng-init="percent.val=.1234" ng-model="percent.val" /> - Model: 
           {{percent.val}}
         </p>
       </div>
@@ -24,6 +26,6 @@
   <h3>How?</h3>
 
 <pre class="prettyprint">
-&lt;input type=&quot;text&quot; id-percent ng-init=&quot;percent.val=12.34&quot; ng-model=&quot;percent.val&quot; /&gt;
+&lt;input type=&quot;text&quot; id-percent ng-init=&quot;percent.val=.1234&quot; ng-model=&quot;percent.val&quot; /&gt;
 </pre>
 </section>

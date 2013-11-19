@@ -27,7 +27,7 @@ angular.module('id.percent',[]).
 
     function formatToPercent(number){
       if(isNaN(number)){
-        return number;
+        return undefined;
       }
        if(number<0){
         return '-' + $filter('number')(number*-1,2)+'%';
@@ -46,26 +46,27 @@ angular.module('id.percent',[]).
                 var viewValue = element.val();
                 var number = stripToNumber(viewValue);
 
-                if(!isNaN(number))
-                {
-                  var formatted = formatToPercent(number);
-                  if (ctrl.$viewValue !== formatted) {
-                      element.val(formatted);
-                      ctrl.$setViewValue(formatted);
-                  }
+                var formatted = formatToPercent(number);
+                if (ctrl.$viewValue !== formatted) {
+                    element.val(formatted);
+                    ctrl.$setViewValue(formatted);
                 }
+
             });
         });
 
         function viewValueChange(viewValue) {
           var decimal = stripToNumber(viewValue);
+          if(!isNaN(decimal)){
+            decimal = decimal/100.0;
+          }
           ctrl.$setValidity('validPercent', !isNaN(decimal));
           return decimal;
         }
   
         function modelChange(val) {
           ctrl.$setValidity('validPercent', !isNaN(val));
-          return formatToPercent(val);
+          return formatToPercent(val*100.0);
         }
 
         ctrl.$parsers.push(viewValueChange);
